@@ -55,5 +55,5 @@ if [ -z $TMUX ] ; then
 fi
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
-export PATH=/home/hime/.nodebrew/current/bin:/home/hime/.rbenv/shims:/home/hime/.rbenv/bin:/home/hime/.rbenv/plugins/ruby-build/bin:/home/hime/.rbenv/shims:/home/hime/.rbenv/bin:/home/hime/.rbenv/shims:/home/hime/.rbenv/bin:/home/hime/.rbenv/plugins/ruby-build/bin:/home/hime/.rbenv/shims:/home/hime/.rbenv/bin:/home/hime/.rbenv/plugins/ruby-build/bin:/home/hime/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+export PATH="$HOME/.nodebrew/current/bin:$PATH"
 export PATH="$HOME/.linuxbrew/bin:$PATH"
