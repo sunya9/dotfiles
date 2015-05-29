@@ -57,3 +57,6 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 export PATH="$HOME/.nodebrew/current/bin:$PATH"
 export PATH="$HOME/.linuxbrew/bin:$PATH"
+alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
+export PATH=${PATH}:${HOME}/Android/Sdk/tools:${HOME}/Android/Sdk/platform-tools
+source ~/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
