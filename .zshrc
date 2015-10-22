@@ -40,21 +40,23 @@ setopt hist_reduce_blanks
 setopt extended_glob
 
 alias ls='ls -F --color=auto' 
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
 export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
 
 if [ -z "$PS1" ]; then return ; fi
 
 if [ -z $TMUX ] ; then
-        if [ -z `tmux ls` ] ; then
-                tmux
-        else
-                tmux attach
-        fi
+  if [ -z `tmux ls` ] ; then
+    tmux
+  else
+    tmux attach
+  fi
 fi
+
 export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+if type "rbenv" > /dev/null; then
+  eval "$(rbenv init -)"
+fi
+
 export PATH="$HOME/.nodebrew/current/bin:$PATH"
 export PATH="$HOME/.linuxbrew/bin:$PATH"
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
