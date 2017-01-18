@@ -1,7 +1,6 @@
-!#/usr/bin/zsh
+!#/usr/bin/sh
 
 cp .zshrc ~
 
-git clone git://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh-syntax-highlighting
-
+git clone git://github.com/zsh-users/zsh-syntax-highlighting.git ~
 source ~/.zshrc
