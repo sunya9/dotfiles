@@ -57,8 +57,18 @@ if type "rbenv" > /dev/null; then
   eval "$(rbenv init -)"
 fi
 
+autoload -Uz vcs_info
+setopt prompt_subst
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr "%F{yellow}!"
+zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
+zstyle ':vcs_info:*' formats "%F{green}%c%u[%b]%f"
+zstyle ':vcs_info:*' actionformats '[%b|%a]'
+precmd () { vcs_info }
+RPROMPT=$RPROMPT'${vcs_info_msg_0_}'
+
 export PATH="$HOME/.nodebrew/current/bin:$PATH"
 export PATH="$HOME/.linuxbrew/bin:$PATH"
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 export PATH=${PATH}:${HOME}/Android/Sdk/tools:${HOME}/Android/Sdk/platform-tools
-source ~/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
