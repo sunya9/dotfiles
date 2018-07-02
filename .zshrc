@@ -42,15 +42,15 @@ setopt extended_glob
 alias ls='ls -F --color=auto' 
 export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
 
-if [ -z "$PS1" ]; then return ; fi
-
-if [ -z $TMUX ] ; then
-  if [ -z `tmux ls` ] ; then
-    tmux
-  else
-    tmux attach
-  fi
-fi
+# if [ -z "$PS1" ]; then return ; fi
+# 
+# if [ -z $TMUX ] ; then
+#   if [ -z `tmux ls` ] ; then
+#     tmux
+#   else
+#     tmux attach
+#   fi
+# fi
 
 export PATH="$HOME/.rbenv/bin:$PATH"
 if type "rbenv" > /dev/null; then
@@ -72,3 +72,82 @@ export PATH="$HOME/.linuxbrew/bin:$PATH"
 alias fuck='eval $(thefuck $(fc -ln -1 | tail -n 1)); fc -R'
 export PATH=${PATH}:${HOME}/Android/Sdk/tools:${HOME}/Android/Sdk/platform-tools
 source ~/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
+alias copy='tmux save-buffer - | pbcopy'
+agent="$HOME/.ssh/agent"
+if [ -S "$SSH_AUTH_SOCK" ]; then
+    case $SSH_AUTH_SOCK in
+    /tmp/*/agent.[0-9]*)
+        ln -snf "$SSH_AUTH_SOCK" $agent && export SSH_AUTH_SOCK=$agent
+    esac
+elif [ -S $agent ]; then
+    export SSH_AUTH_SOCK=$agent
+else
+    echo "no ssh-agent"
+fi
+
+# added by travis gem
+[ -f /home/xyz/.travis/travis.sh ] && source /home/xyz/.travis/travis.sh
+
+# export NVM_DIR="/home/xyz/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+export PATH="$PATH:./node_modules/.bin"
+
+# attach already session
+#if [[ ! -n $TMUX ]]; then
+  # get the IDs
+#  ID="`tmux list-sessions`"
+#  if [[ -z "$ID" ]]; then
+#    tmux new-session
+#  fi
+#  ID="`echo $ID | $PERCOL | cut -d: -f1`"
+#  tmux attach-session -t "$ID"
+#fi
+
+function peco-history-selection() {
+    BUFFER=`history -n 1 | tac | awk '!a[$0]++' | peco`
+    CURSOR=$#BUFFER
+    zle reset-prompt
+}
+
+zle -N peco-history-selection
+bindkey '^R' peco-history-selection
+source ~/.cargo/env
+
+# peco find directory
+function peco-find() {
+  local current_buffer=$BUFFER
+  local search_root=""
+  local file_path=""
+
+  if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    search_root=`git rev-parse --show-toplevel`
+  else
+    search_root=`pwd`
+  fi
+  file_path="$(find ${search_root} -maxdepth 5 | peco)"
+  BUFFER="${current_buffer} ${file_path}"
+  CURSOR=$#BUFFER
+  zle clear-screen
+}
+zle -N peco-find
+
+# bind keys
+bindkey '^f' peco-find
+
+function git-root() {
+  if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    cd `pwd`/`git rev-parse --show-cdup`
+  fi
+}
+
+alias ls=exa
+
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+export DefaultIMModule=fcitx
+export PATH="$PATH:`yarn global bin`"
+bindkey '^[[1;2C' forward-word
+bindkey '^[[1;2D' backward-word
