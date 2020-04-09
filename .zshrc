@@ -84,7 +84,8 @@ if [ -S "$SSH_AUTH_SOCK" ]; then
 elif [ -S $agent ]; then
     export SSH_AUTH_SOCK=$agent
 else
-    echo "no ssh-agent"
+    # echo "no ssh-agent"
+    eval $(ssh-agent)
 fi
 
 # added by travis gem
@@ -118,7 +119,7 @@ source ~/.cargo/env
 # peco find directory
 function peco-find() {
   local current_buffer=$BUFFER
-  local search_root=""
+  local search_raoot=""
   local file_path=""
 
   if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
@@ -142,6 +143,10 @@ function git-root() {
   fi
 }
 
+function start-activity() {
+  adb shell am start -n $(xmllint --xpath '//activity/@*[local-name()="name"]' app/src/main/AndroidManifest.xml | sed -r "s/ /\n/g; s/android:name|[\"]//g; s/=/$(xmllint --xpath 'string(/manifest/@package)' app/src/main/AndroidManifest.xml)\//g" | peco)
+}
+
 alias ls=exa
 
 export GTK_IM_MODULE=fcitx
@@ -151,3 +156,26 @@ export DefaultIMModule=fcitx
 export PATH="$PATH:`yarn global bin`"
 bindkey '^[[1;2C' forward-word
 bindkey '^[[1;2D' backward-word
+alias cat=bat
+alias start-ac=start-activity
+bindkey '^A' start-activity
+export PATH="$PATH:/opt/gradle/gradle-5.4.1/bin"
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+export PATH=$PATH:$JAVA_HOME/bin
+export PATH=/home/xyz/.cargo/bin:/home/xyz/.linuxbrew/bin:/home/xyz/.nodebrew/current/bin:/home/xyz/.rbenv/shims:/home/xyz/.rbenv/bin:/home/xyz/.rbenv/plugins/ruby-build/bin:/home/xyz/.cargo/bin:/home/xyz/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/xyz/Android/Sdk/tools:/home/xyz/Android/Sdk/platform-tools:./node_modules/.bin:/home/xyz/.yarn/bin:/opt/gradle/gradle-5.4.1/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/opt/flutter/bin
+zstyle ':completion:*:default' menu select=2
+export PATH=$PATH:/snap/bin
+export PATH=$PATH:~/.local/bin
+
+
+# The next line updates PATH for Netlify's Git Credential Helper.
+if [ -f '/home/xyz/.netlify/helper/path.zsh.inc' ]; then source '/home/xyz/.netlify/helper/path.zsh.inc'; fi
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/xyz/google-cloud-sdk/path.zsh.inc' ]; then . '/home/xyz/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/xyz/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/xyz/google-cloud-sdk/completion.zsh.inc'; fi
+export PATH=$PATH:/usr/local/go/bin
+eval "$(direnv hook zsh)"
+
